@@ -9,7 +9,6 @@ Este projeto é um sistema de monitoramento financeiro, desenvolvido para acompa
 - [Instruções de Instalação](#instruções-de-instalação)
 - [Como Usar](#como-usar)
 - [Scripts SQL](#scripts-sql)
-- [Contribuição](#contribuição)
 
 ## Funcionalidades
 
