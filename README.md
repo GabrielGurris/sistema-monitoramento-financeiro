@@ -53,29 +53,29 @@ CREATE TABLE limites_de_gastos (
     categoria_id INT,
     FOREIGN KEY (categoria_id) REFERENCES categorias(categoria_id)
 );
-Instruções de Instalação
-Clone o repositório:
+```
+## Instruções de Instalação
 
-git clone https://github.com/GabrielGurris/sistema-monitoramento-financeiro.git
-cd sistema-monitoramento-financeiro
-No MySQL Workbench, importe o arquivo sistema_monitoramento_financeiro.sql para criar a estrutura e popular as tabelas com dados de exemplo.
+1. Clone o repositório:  
+```- git clone https://github.com/GabrielGurris/sistema-monitoramento-financeiro.git```  
+```- cd sistema-monitoramento-financeiro```
 
-Execute os scripts SQL para configurar o banco e criar triggers e procedures.
+2. No MySQL Workbench, importe o arquivo ```sistema_monitoramento_financeiro.sql``` para criar a estrutura e popular as tabelas com dados de exemplo.
+3. Execute os scripts SQL para configurar o banco e criar triggers e procedures.
 
-Como Usar
-Inserir Transações
-Para registrar uma nova transação (exemplo de despesa):
+## Como Usar
+### Inserir Transações
+Para registrar uma nova transação (exemplo de despesa):  
+```INSERT INTO transacoes (valor, data, descricao, tipo, categoria_id) VALUES (40.00, '2024-10-05', 'Uber', 'despesa', 2);```
 
-INSERT INTO transacoes (valor, data, descricao, tipo, categoria_id)
-VALUES (400.00, '2024-10-05', 'Uber', 'despesa', 2);
-Gerar Relatório Mensal
-Chame a procedure para gerar o relatório financeiro do mês atual:
+### Gerar Relatório Mensal
+Chame a procedure para gerar o relatório financeiro do mês atual:  
+```CALL relatorio_mensal_financeiro();```
 
+### Triggers
+O sistema utiliza triggers para evitar que as despesas excedam o limite de gastos de uma categoria:  
 
-CALL relatorio_mensal_financeiro();
-Triggers
-O sistema utiliza triggers para evitar que as despesas excedam o limite de gastos de uma categoria:
-
+```sql
 DELIMITER //
 
 CREATE TRIGGER verificar_limite_antes_insercao
@@ -100,11 +100,21 @@ BEGIN
 END //
 
 DELIMITER ;
-Scripts SQL
-Todos os scripts SQL estão incluídos no arquivo sistema_monitoramento_financeiro.sql. O arquivo contém:
+```
 
-Estrutura das tabelas.
-Triggers para validação de limites.
-Procedures para geração de relatórios financeiros mensais.
-Contribuição
-Contribuições são bem-vindas! Sinta-se à vontade para fazer um fork deste repositório, criar uma branch com suas alterações e abrir um Pull Request para revisão.
+### Teste do Funcionamento da Trigger
+Para registrar uma nova transação (exemplo de despesa):  
+```INSERT INTO transacoes (valor, data, descricao, tipo, categoria_id) VALUES (6000.00, '2024-10-05', 'Uber', 'despesa', 2);```  
+  
+Note o erro que aparecerá na saída:  
+```Error Code: 1644. Alerta: Esta transação excede o limite de gastos para esta categoria.```  
+
+Este erro ocorre pois o valor máximo definido para gastos com transporte era de ```400.00```.
+
+## Scripts SQL
+Todos os scripts SQL estão incluídos no arquivo ```sistema_monitoramento_financeiro.sql```. O arquivo contém:
+
+- Estrutura das tabelas.
+- Triggers para validação de limites.
+- Procedures para geração de relatórios financeiros mensais.
+
